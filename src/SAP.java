@@ -3,7 +3,7 @@ import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
 
 public class SAP {
 
-    private Digraph digraph;
+    private final Digraph digraph;
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G){
@@ -21,27 +21,28 @@ public class SAP {
         validateVertex(v);
         validateVertex(w);
 
-        // create bfs from v and w
-        BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(digraph, v);
-        BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(digraph, w);
-
-        // for each vertex, check distance from v and w. return shortest.
-        int minDistance = -1;
-        int currDistance = 0;
-        for (int i=0; i < digraph.V(); i++) {
-            if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
-                currDistance = vBFS.distTo(i) + wBFS.distTo(i);
-                if (minDistance == -1 || minDistance > currDistance) {
-                    minDistance = currDistance;
-                }
-            }
+        // if v==w the length of shortest ancestral path is 0
+        if (v==w) {
+            return 0;
         }
-        return minDistance;
+
+        int[] results = ancestorPath(v, w);
+        return results[0];
     }
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w){
+        // check if v or w are out of bound
+        validateVertex(v);
+        validateVertex(w);
 
+        // if v==w than the common ancestor is v itself.
+        if (v==w) {
+            return v;
+        }
+
+        int[] results = ancestorPath(v, w);
+        return results[1];
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
@@ -62,5 +63,26 @@ public class SAP {
     private void validateVertex(int v) {
         if (v < 0 || v >= digraph.V())
             throw new IllegalArgumentException("vertex is out of range");
+    }
+
+    private int[] ancestorPath(int v, int w) {
+        // create bfs from v and w
+        BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(digraph, v);
+        BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(digraph, w);
+
+        // for each vertex, check distance from v and w. return shortest.
+        int minDistance = -1;
+        int commonAncestor = -1;
+        int currDistance = 0;
+        for (int i=0; i < digraph.V(); i++) {
+            if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
+                currDistance = vBFS.distTo(i) + wBFS.distTo(i);
+                if (minDistance == -1 || minDistance > currDistance) {
+                    minDistance = currDistance;
+                    commonAncestor = i;
+                }
+            }
+        }
+        return new int[] {minDistance, commonAncestor}; // is it ok to do "new int[]" on return?
     }
 }
