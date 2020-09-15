@@ -35,6 +35,19 @@ public class WordNet {
         SAP sap = new SAP(wordnet);
     }
 
+    // returns all WordNet nouns
+    public Iterable<String> nouns() {
+        return synsetsMap.keySet();
+    }
+
+    // is the word a WordNet noun?
+    public boolean isNoun(String word) {
+        if (word == null) {
+            throw new IllegalArgumentException("Null argument");
+        }
+        return synsetsMap.containsKey(word);
+    }
+
     // read synsets from file, return the number of synsets.
     // save synsets in hashmap
     private int readSynsets(String synsets)
