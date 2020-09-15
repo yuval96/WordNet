@@ -1,5 +1,8 @@
-import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
+import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
 
 public class SAP {
 
@@ -7,7 +10,7 @@ public class SAP {
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G){
-        if (G==Null) {
+        if (G==null) {
             throw new IllegalArgumentException("Digraph is Null");
         }
 
@@ -17,7 +20,6 @@ public class SAP {
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
-
 
         int[] results = ancestorPath(v, w);
         return results[0];
@@ -80,7 +82,7 @@ public class SAP {
                 }
             }
         }
-        return new int[] {minDistance, commonAncestor}; // is it ok to do "new int[]" on return?
+        return new int[] {minDistance, commonAncestor};
     }
 
     private int[] ancestorPath(Iterable<Integer> v, Iterable<Integer> w) {
@@ -105,11 +107,20 @@ public class SAP {
                 }
             }
         }
-        return new int[] {minDistance, commonAncestor}; // is it ok to do "new int[]" on return?
+        return new int[] {minDistance, commonAncestor};
     }
 
     // do unit testing of this class
-    public static void main(String[] args){
-
-    }
+//    public static void main(String[] args){
+//        In in = new In(args[0]);
+//        Digraph G = new Digraph(in);
+//        SAP sap = new SAP(G);
+//        while (!StdIn.isEmpty()) {
+//            int v = StdIn.readInt();
+//            int w = StdIn.readInt();
+//            int length   = sap.length(v, w);
+//            int ancestor = sap.ancestor(v, w);
+//            StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
+//        }
+//    }
 }
