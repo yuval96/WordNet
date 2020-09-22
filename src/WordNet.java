@@ -4,13 +4,16 @@ import java.util.HashMap;
 public class WordNet {
 
     private HashMap<String, Bag<Integer>> synsetsMap;
+    private HashMap<Integer, String> allSynsets;
     private Digraph wordnet;
+    private SAP sap;
 
     // constructor takes the name of the two input files
     public WordNet(String synsets, String hypernyms) {
         if (synsets == null || hypernyms == null)
             throw new IllegalArgumentException("Argument is null");
 
+        allSynsets = new HashMap<Integer, String>();
         synsetsMap = new HashMap<String, Bag<Integer>>();
         int count = readSynsets(synsets);
         wordnet = new Digraph(count);
@@ -24,15 +27,15 @@ public class WordNet {
         // check that the graph is single rooted
         int root = 0;
         for (int i = 0; i<count; i++) {
-            if (wordnet.outdegree(i) != 0)
-                root ++;
+            if (wordnet.outdegree(i) == 0)
+                root++;
             if (root > 1) {
                 throw new IllegalArgumentException("Input is not single rooted, exiting");
             }
         }
 
         //create new sap instance
-        SAP sap = new SAP(wordnet);
+        sap = new SAP(wordnet);
     }
 
     // returns all WordNet nouns
@@ -46,6 +49,24 @@ public class WordNet {
             throw new IllegalArgumentException("Null argument");
         }
         return synsetsMap.containsKey(word);
+    }
+
+    // distance between nounA and nounB (defined below)
+    public int distance(String nounA, String nounB) {
+        Iterable<Integer> v = synsetsMap.get(nounA);
+        Iterable<Integer> w = synsetsMap.get(nounB);
+
+        return sap.length(v, w);
+    }
+
+    // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
+    // in a shortest ancestral path (defined below)
+    public String sap(String nounA, String nounB) {
+        Iterable<Integer> v = synsetsMap.get(nounA);
+        Iterable<Integer> w = synsetsMap.get(nounB);
+
+        int ancestor = sap.ancestor(v, w);
+        return allSynsets.get(ancestor);
     }
 
     // read synsets from file, return the number of synsets.
@@ -63,6 +84,7 @@ public class WordNet {
             line = in.readLine().split(",");
             // find the id and synset nouns
             id = Integer.parseInt(line[0]);
+            allSynsets.put(id, line[1]);
             nouns = line[1].split(" ");
             // for each noun in the synset, check if it exists in the map.
             // if not, add it by creating a new back. if yes, update the existing bag.
@@ -71,7 +93,7 @@ public class WordNet {
                     synsetsMap.get(noun).add(id);
                 }
                 else {
-                    Bag<Integer> bag = new Bag<Integer>;
+                    Bag<Integer> bag = new Bag<Integer>();
                     bag.add(id);
                     synsetsMap.put(noun, bag);
                 }
@@ -99,8 +121,11 @@ public class WordNet {
     }
 
     // do unit testing of this class
-    public static void main(String[] args) {
-
-        WordNet wn = new WordNet(args[0], args[1]);
-    }
+//    public static void main(String[] args) {
+//
+//        WordNet wn = new WordNet(args[0], args[1]);
+//
+//        System.out.println("Distance between communications and spunk = " + wn.distance("actin", "chondrin"));
+//        System.out.println("SAP for communications and spunk = " + wn.sap("actin", "chondrin"));
+//    }
 }
