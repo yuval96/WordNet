@@ -39,7 +39,7 @@
       <recent name="D:\Programming\Algorithm Coursera\Programming Assignments\WordNet" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.WordNet">
+  <component name="RunManager" selected="Application.Outcast">
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <method v="2" />
@@ -59,6 +59,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Outcast" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Outcast" />
+      <module name="WordNet" />
+      <option name="PROGRAM_PARAMETERS" value="DataFiles/synsets.txt DataFiles/hypernyms.txt DataFiles/outcast5.txt DataFiles/outcast8.txt DataFiles/outcast11.txt" />
+      <method v="2" />
+    </configuration>
     <configuration name="SAP" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="SAP" />
       <module name="WordNet" />
@@ -73,9 +79,7 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+      <method v="2" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="TEST_OBJECT" value="class" />
